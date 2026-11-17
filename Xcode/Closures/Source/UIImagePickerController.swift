@@ -18,6 +18,7 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#if !os(tvOS)
 import UIKit
 import MobileCoreServices
 import PhotosUI
@@ -373,3 +374,4 @@ extension UIImagePickerController: DelegatorProtocol {
         delegator.delegate = delegate
     }
 }
+#endif

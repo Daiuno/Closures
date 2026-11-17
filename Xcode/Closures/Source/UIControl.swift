@@ -566,6 +566,7 @@ fileprivate final class TextFieldDelegate: NSObject, UITextFieldDelegate, Delega
     }
 }
 
+#if !os(tvOS)
 @available(iOS 9.0, *)
 extension UISwitch {
     // MARK: Common Events
@@ -605,6 +606,7 @@ extension UISlider {
         return self
     }
 }
+#endif
 
 @available(iOS 9.0, *)
 extension UISegmentedControl {
@@ -626,6 +628,7 @@ extension UISegmentedControl {
     }
 }
 
+#if !os(tvOS)
 @available(iOS 9.0, *)
 extension UIStepper {
     // MARK: Common Events
@@ -645,6 +648,7 @@ extension UIStepper {
         return self
     }
 }
+#endif
 
 @available(iOS 9.0, *)
 extension UIPageControl {
@@ -666,6 +670,7 @@ extension UIPageControl {
     }
 }
 
+#if !os(tvOS)
 @available(iOS 9.0, *)
 extension UIDatePicker {
     // MARK: Common Events
@@ -685,3 +690,4 @@ extension UIDatePicker {
         return self
     }
 }
+#endif

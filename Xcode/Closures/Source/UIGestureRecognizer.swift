@@ -74,7 +74,9 @@ extension UITapGestureRecognizer {
         self.init()
         configure(gesture: self, handler: handler)
         numberOfTapsRequired = tapsRequired
+#if !os(tvOS)
         numberOfTouchesRequired = touchesRequired
+#endif
     }
 }
 
@@ -122,7 +124,9 @@ extension UILongPressGestureRecognizer {
         self.init()
         configure(gesture: self, handler: handler)
         numberOfTapsRequired = tapsRequired
+#if !os(tvOS)
         numberOfTouchesRequired = touchesRequired
+#endif
         minimumPressDuration = minDuration
         self.allowableMovement = allowableMovement
     }
@@ -158,6 +162,7 @@ extension UIView {
     }
 }
 
+#if !os(tvOS)
 extension UIPinchGestureRecognizer {
     /**
      A convenience initializer for a UIPinchGestureRecognizer so that it
@@ -188,6 +193,7 @@ extension UIView {
         return gesture
     }
 }
+#endif
 
 extension UISwipeGestureRecognizer {
     /**
@@ -204,7 +210,9 @@ extension UISwipeGestureRecognizer {
         self.init()
         configure(gesture: self, handler: handler)
         self.direction = direction
+#if !os(tvOS)
         self.numberOfTouchesRequired = touchesRequired
+#endif
     }
 }
 
@@ -232,6 +240,7 @@ extension UIView {
     }
 }
 
+#if !os(tvOS)
 extension UIRotationGestureRecognizer {
     /**
      A convenience initializer for a UIRotationGestureRecognizer so that it
@@ -262,6 +271,7 @@ extension UIView {
         return gesture
     }
 }
+#endif
 
 extension UIPanGestureRecognizer {
     /**
@@ -277,8 +287,10 @@ extension UIPanGestureRecognizer {
                             handler: @escaping (_ gesture: UIPanGestureRecognizer) -> Void) {
         self.init()
         configure(gesture: self, handler: handler)
+#if !os(tvOS)
         minimumNumberOfTouches = minTouches
         maximumNumberOfTouches = maxTouches
+#endif
     }
 }
 
@@ -306,6 +318,7 @@ extension UIView {
     }
 }
 
+#if !os(tvOS)
 extension UIScreenEdgePanGestureRecognizer {
     /**
      A convenience initializer for a UIScreenEdgePanGestureRecognizer so that it
@@ -342,6 +355,7 @@ extension UIView {
         return gesture
     }
 }
+#endif
 
 @available(iOS 9.0, *)
 fileprivate final class GestureRecognizerDelegate: NSObject, UIGestureRecognizerDelegate, DelegateProtocol {

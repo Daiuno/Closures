@@ -270,8 +270,10 @@ class TableViewDelegate: ScrollViewDelegate, UITableViewDelegate, UITableViewDat
     fileprivate var didDeselectRowAt: ((_ indexPath: IndexPath) -> Void)?
     fileprivate var editingStyleForRowAt: ((_ indexPath: IndexPath) -> UITableViewCell.EditingStyle)?
     fileprivate var titleForDeleteConfirmationButtonForRowAt: ((_ indexPath: IndexPath) -> String?)?
+#if !os(tvOS)
     @available(iOS, deprecated: 13.0)
     fileprivate var editActionsForRowAt: ((_ indexPath: IndexPath) -> [UITableViewRowAction]?)?
+#endif
     fileprivate var shouldIndentWhileEditingRowAt: ((_ indexPath: IndexPath) -> Bool)?
     fileprivate var willBeginEditingRowAt: ((_ indexPath: IndexPath) -> Void)?
     fileprivate var didEndEditingRowAt: ((_ indexPath: IndexPath?) -> Void)?
@@ -298,6 +300,7 @@ class TableViewDelegate: ScrollViewDelegate, UITableViewDelegate, UITableViewDat
     fileprivate var sectionForSectionIndexTitle: ((_ title: String, _ index: Int) -> Int)?
     fileprivate var commit: ((_ editingStyle: UITableViewCell.EditingStyle, _ indexPath: IndexPath) -> Void)?
     fileprivate var moveRowAt: ((_ sourceIndexPath: IndexPath, _ destinationIndexPath: IndexPath) -> Void)?
+#if !os(tvOS)
     private var _leadingSwipeActionsConfigurationForRowAt: Any?
     @available(iOS 11, *)
     fileprivate var leadingSwipeActionsConfigurationForRowAt: ((_ indexPath: IndexPath) -> UISwipeActionsConfiguration?)? {
@@ -328,6 +331,7 @@ class TableViewDelegate: ScrollViewDelegate, UITableViewDelegate, UITableViewDat
             _shouldSpringLoadRowAt = newValue
         }
     }
+#endif
     private var _shouldBeginMultipleSelectionInteractionAt: Any?
     @available(iOS 13.0, *)
     fileprivate var shouldBeginMultipleSelectionInteractionAt: ((_ indexPath: IndexPath) -> Bool)?  {
@@ -362,6 +366,7 @@ class TableViewDelegate: ScrollViewDelegate, UITableViewDelegate, UITableViewDat
      }
     
     override func responds(to aSelector: Selector!) -> Bool {
+#if !os(tvOS)
         if #available(iOS 11, *) {
             switch aSelector {
             case #selector(TableViewDelegate.tableView(_:leadingSwipeActionsConfigurationForRowAt:)):
@@ -401,6 +406,7 @@ class TableViewDelegate: ScrollViewDelegate, UITableViewDelegate, UITableViewDat
                 break
             }
         }
+#endif
         
         switch aSelector {
         case #selector(TableViewDelegate.tableView(_:willDisplay:forRowAt:)):
@@ -449,14 +455,18 @@ class TableViewDelegate: ScrollViewDelegate, UITableViewDelegate, UITableViewDat
             return didDeselectRowAt != nil
         case #selector(TableViewDelegate.tableView(_:editingStyleForRowAt:)):
             return editingStyleForRowAt != nil
+#if !os(tvOS)
         case #selector(TableViewDelegate.tableView(_:titleForDeleteConfirmationButtonForRowAt:)):
             return titleForDeleteConfirmationButtonForRowAt != nil
+#endif
         case #selector(TableViewDelegate.tableView(_:shouldIndentWhileEditingRowAt:)):
             return shouldIndentWhileEditingRowAt != nil
+#if !os(tvOS)
         case #selector(TableViewDelegate.tableView(_:willBeginEditingRowAt:)):
             return willBeginEditingRowAt != nil
         case #selector(TableViewDelegate.tableView(_:didEndEditingRowAt:)):
             return didEndEditingRowAt != nil
+#endif
         case #selector(TableViewDelegate.tableView(_:targetIndexPathForMoveFromRowAt:toProposedIndexPath:)):
             return targetIndexPathForMoveFromRowAt != nil
         case #selector(TableViewDelegate.tableView(_:indentationLevelForRowAt:)):
@@ -591,6 +601,7 @@ extension TableViewDelegate {
         return editingStyleForRowAt?(indexPath) ??  .delete
     }
     
+#if !os(tvOS)
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
         return titleForDeleteConfirmationButtonForRowAt?(indexPath) ??  Bundle(identifier: "com.apple.UIKit")?.localizedString(forKey: "Delete", value: nil, table: nil)
     }
@@ -599,11 +610,13 @@ extension TableViewDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?  {
         return editActionsForRowAt?(indexPath) ??  nil
     }
+#endif
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return shouldIndentWhileEditingRowAt?(indexPath) ??  true
     }
     
+#if !os(tvOS)
     func tableView(_ tableView: UITableView, willBeginEditingRowAt indexPath: IndexPath) {
         willBeginEditingRowAt?(indexPath)
     }
@@ -611,6 +624,7 @@ extension TableViewDelegate {
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
         didEndEditingRowAt?(indexPath)
     }
+#endif
     
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         return targetIndexPathForMoveFromRowAt?(sourceIndexPath, proposedDestinationIndexPath) ??  proposedDestinationIndexPath
@@ -694,6 +708,7 @@ extension TableViewDelegate {
         moveRowAt?(sourceIndexPath, destinationIndexPath)
     }
     
+#if !os(tvOS)
     @available(iOS 11, *)
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         return leadingSwipeActionsConfigurationForRowAt?(indexPath)
@@ -723,6 +738,7 @@ extension TableViewDelegate {
     func tableViewDidEndMultipleSelectionInteraction(_ tableView: UITableView) {
         didEndMultipleSelectionInteraction?()
     }
+#endif
 }
 
 @available(iOS 9.0, *)
@@ -1023,11 +1039,13 @@ extension UITableView {
      
      * returns: itself so you can daisy chain the other delegate calls
      */
+#if !os(tvOS)
     @available(iOS, deprecated: 13.0)
     @discardableResult
     public func editActionsForRowAt(handler: @escaping (_ indexPath: IndexPath) -> [UITableViewRowAction]?) -> Self {
         return update { $0.editActionsForRowAt = handler }
     }
+#endif
     
     /**
      Equivalent to implementing UITableViewDelegate's tableView(_:shouldIndentWhileEditingRowAt:) method
@@ -1308,6 +1326,7 @@ extension UITableView {
         return update { $0.moveRowAt = handler }
     }
     
+#if !os(tvOS)
     /**
      Equivalent to implementing UITableViewDelegate's tableView(_:leadingSwipeActionsConfigurationForRowAt:) method
      
@@ -1343,6 +1362,7 @@ extension UITableView {
     public func shouldSpringLoadRowAt(handler: @escaping (_ indexPath: IndexPath, _ context: UISpringLoadedInteractionContext) -> Bool) -> Self {
         return update { $0.shouldSpringLoadRowAt = handler }
     }
+#endif
 
     /**
     Equivalent to implementing UITableViewDelegate's tableView(_:shouldBeginMultipleSelectionInteractionAt:) method
